@@ -1,16 +1,18 @@
 function [Xs, Ys, Zs] = geocentric2cartesian(Xg, Yg, Zg)
 
+format long
+
 % WGS84
 a = 6378137; % Semi-major axis
 e_exp2 = 0.00669437999014; % Excentricity squared
 
 % Reference system coordinates 
-L = deg2rad(41.11571); % System reference lat in rad
-G = deg2rad(1.69250); % System reference lon in rad
-H = 4.0; % System reference h in m
+L = deg2rad(41.11571111); % System reference lat in rad
+G = deg2rad(1.692502778); % System reference lon in rad
+H = 0; % System reference h in m
 
-% Generate a matrix of n x 3
-geocentricCoordinates = [Xg, Yg, Zg]; 
+% Generate a matrix of 3 x m
+geocentricCoordinates = [Xg'; Yg'; Zg']; 
 
 % Reference system parameters
 eta = a / sqrt(1 - e_exp2 * sin(L)^2);
@@ -29,12 +31,12 @@ Rs = [
 ];
 
 % Apply transformation
-cartesianCoordinates = (Rs*geocentricCoordinates')' + T';
+cartesianCoordinates = Rs*(geocentricCoordinates + T);
 
 % Separar las coordenadas resultantes
-Xs = cartesianCoordinates(:, 1);
-Ys = cartesianCoordinates(:, 2);
-Zs = cartesianCoordinates(:, 3);
+Xs = cartesianCoordinates(1, :);
+Ys = cartesianCoordinates(2, :);
+Zs = cartesianCoordinates(3, :);
 
 end
 

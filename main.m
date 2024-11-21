@@ -1,6 +1,8 @@
 close all
 clear all
 
+format long
+
 % Abrir el archivo en modo lectura
 filename = 'P3_08_12h.csv'; % Reemplaza con el nombre correcto
 fileID = fopen(filename, 'r');
@@ -55,3 +57,6 @@ H = str2double(H);
 [Xg, Yg, Zg] = geodesic2geocentric(LAT, LON, H);
 [Xs, Ys, Zs] = geocentric2cartesian(Xg, Yg, Zg);
 [U, V, Hs] = cartesian2stereographic(Xs, Ys, Zs);
+
+U = U/1000;
+V = V/1000;

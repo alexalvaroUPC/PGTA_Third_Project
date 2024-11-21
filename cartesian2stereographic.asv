@@ -12,7 +12,7 @@ L = deg2rad(41.11571111); % System reference lat in rad
 RTo = (a*(1-e_exp2))/(sqrt(1-e_exp2*(sin(L))^2)^3); % Can change depending on the referene system [m]
 
 dxy = sqrt(Xs.^2 + Ys.^2);
-hxy = 6368942.808; % In [m]
+hxy = 63781376356752.31; % In [m]
 
 H = sqrt((dxy.^2)+(Zs + hxy + RTo).^2) - RTo;
 
