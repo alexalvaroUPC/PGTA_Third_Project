@@ -58,5 +58,6 @@ H = str2double(H);
 [Xs, Ys, Zs] = geocentric2cartesian(Xg, Yg, Zg);
 [U, V, Hs] = cartesian2stereographic(Xs, Ys, Zs);
 
-U = U/1000;
-V = V/1000;
+% Conversion to NM
+U = U/1852;
+V = V/1852;
