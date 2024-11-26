@@ -42,9 +42,22 @@ end
 dataMatrix = [headers; data];
 
 % Geodesic coordinates
-LAT = dataMatrix(2:end,3);
-LON = dataMatrix(2:end,4);
-H = dataMatrix(2:end,5);
+
+for i=1:length(headers)
+    if (headers(i) == 'LAT')
+        LAT = dataMatrix(2:end,i);
+    elseif (headers(i) == 'LON')
+        LON = dataMatrix(2:end,i);
+    elseif (headers(i) == 'H')
+        H = dataMatrix(2:end,i);
+    elseif (headers(i) == 'HDG')
+        HDG = dataMatrix(2:end,i);
+    elseif (headers(i) == 'TI')
+        TI = dataMatrix(2:end,i);
+    elseif (headers(i) == 'IAS')
+        IAS = dataMatrix(2:end,i);
+    end
+end
 
 LAT = strrep(LAT, ',', '.');
 LON = strrep(LON, ',', '.');
@@ -58,6 +71,44 @@ H = str2double(H);
 [Xs, Ys, Zs] = geocentric2cartesian(Xg, Yg, Zg);
 [U, V, Hs] = cartesian2stereographic(Xs, Ys, Zs);
 
-% Conversion to NM
+% Conversion to NM => 1NM = 1852m
 U = U/1852;
 V = V/1852;
+
+% Initialize departures in 24L matrix
+departures24L = [];
+
+HDG = strrep(HDG,',','.');
+HDG = str2double(HDG);
+
+
+IAS = strrep(IAS,',','.');
+IAS = str2double(IAS); % in kts
+
+H = H*3.28084; % Conversion to feet
+
+for i=1:(length(dataMatrix)-1)
+    if (HDG(i) >= -117 && HDG(i) <= -115)
+        departures24L = [departures24L; TI(i), HDG(i), H(i), IAS(i)];
+    end
+end
+
+uniqueTI = unique(departures24L(:,1), 'stable');
+TIdepartures24L = cell(length(uniqueTI), 1);
+
+for i = 1:length(uniqueTI)
+    % Index where TI == uniqueTI
+    index = departures24L(:, 1) == uniqueTI(i);
+
+    % Extract HDG and H
+    TIdepartures24L{i} = departures24L(index, 2:4);
+end
+
+plot(str2double(TIdepartures24L{1,1}(:,2)), str2double(TIdepartures24L{1,1}(:,3)));
+ylabel("IAS (kts)");
+xlabel("Height (ft)")
+hold on
+yLimits = ylim;
+yZone = [yLimits(1), yLimits(1), yLimits(2), yLimits(2)];
+xZone = [825, 875, 875, 825];
+fill(xZone, yZone, 'red', 'FaceAlpha', 0.3, 'EdgeColor', 'none');
