@@ -1,0 +1,27 @@
+function [aircraft] = aboveThresholdData(aircraft, U, V, shape)
+switch shape
+    case "Circle"
+    RunwayWidth = 60;
+    extraFactor = 1.5;
+
+    AreaRadius = RunwayWidth/2*extraFactor/1852;
+    for i = 1:numel(aircraft)
+        myAC = aircraft(i);
+        k = 1;
+        m = 1;
+        for j = 1:numel(myAC.IASinterp)
+            if myAC.Uinterp(j) > -400
+                dist2Thr = sqrt((myAC.Uinterp(j)-U)^2+(myAC.Vinterp(j)-V)^2);
+                aircraft(i).ThrDist(m) = dist2Thr;
+                m = m +1 ;
+                if  dist2Thr < AreaRadius
+                    aircraft(i).ThrIAS(k) = myAC.IASinterp(j);
+                    aircraft(i).ThrAlt(k) = myAC.AltInterp(j);
+                    k = k +1;
+                end
+            end
+        end
+    end
+    case "P24L"
+        lat_lon_vertices = [41.282328 2.073547;41.283486 2.076939;41.283003 2.077214;41.281847 2.073839]
+        

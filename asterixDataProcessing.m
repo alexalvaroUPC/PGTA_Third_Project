@@ -41,14 +41,14 @@ end
 LAT = str2double(strrep(LAT, ',', '.')); LON = str2double(strrep(LON, ',', '.')); H = str2double(strrep(H, ',', '.')); 
 FLstring = strrep(FLstring, ',', '.'); BPstring = strrep(BPstring, ',', '.'); 
 HDG = str2double(strrep(HDG,',','.')); IAS = str2double(strrep(IAS,',','.'));
-
+HDG(HDG<0) = HDG(HDG<0) + 360;
 [Xg, Yg, Zg] = geodesic2geocentric(LAT, LON, H);
 [Xs, Ys, Zs] = geocentric2cartesian(Xg, Yg, Zg);
 [U, V, Hs] = cartesian2stereographic(Xs, Ys, Zs);
 % Altitude correction
 correctedModeC = zeros(size(LAT));
-FL = -100*ones(size(FLstring));
-BP = -100*ones(size(BPstring));
+FL = -400*ones(size(FLstring));
+BP = -400*ones(size(BPstring));
 for i = 1:size(FLstring,1)
     if ((BPstring(i)~="N/A")&&(BPstring(i)~="NV"))
         BP(i) = str2double(BPstring(i));
@@ -59,7 +59,7 @@ for i = 1:size(FLstring,1)
 end
 
 for i = 1:size(correctedModeC,1)
-    if ((BP(i)==-100) || (FL(i) == -100))
+    if ((BP(i)==-400) || (FL(i) == -400))
         correctedModeC(i) = FL(i);
     else
         if (FL(i) >=60.0 || BP(i)<=1013.3)

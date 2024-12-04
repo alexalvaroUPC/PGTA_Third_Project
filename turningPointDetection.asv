@@ -1,0 +1,16 @@
+function [aircraft] = turningPointDetection(aircraft)
+
+for i=1:30:numel(aircraft)
+    myAC = aircraft(i);
+    differentialHDG = diff(myAC.HDGinterp);
+    for j = numel(differentialHDG)
+        if differentialHDG(j) <-1.3
+             aircraft(i).turningLAT = myAC.LATinterp(j);
+             aircraft(i).turningLON = myAC.LONinterp(j);
+             aircraft(i).turningAlt = myAC.AltI
+            break
+        end
+    end
+   
+end
+end
