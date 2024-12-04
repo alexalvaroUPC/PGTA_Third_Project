@@ -33,7 +33,7 @@ switch shape
             m = 1;
             in = inpolygon(myAC.Uinterp, myAC.Vinterp, studyArea.Vertices(:,1), studyArea.Vertices(:,2));
             aircraft(i).ThrIAS = myAC.IASinterp(in);
-            aircraft(i).THrAlt = myAC.AltInterp(in);
+            aircraft(i).ThrAlt = myAC.AltInterp(in);
             for j = 1:numel(myAC.IASinterp)
                 if myAC.Uinterp(j) > -400
                     dist2Thr = sqrt((myAC.Uinterp(j)-U)^2+(myAC.Vinterp(j)-V)^2);

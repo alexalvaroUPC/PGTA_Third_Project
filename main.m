@@ -33,6 +33,7 @@ Hcamping = 0;
 [Ucamping, Vcamping, HsCamping] = singlePointGeodesic2Sterographic(LATcamping,LONcamping,Hcamping);
 %% DISTANCES BETWEEN SUCCESSIVE DEPARTURES
 distances24L = distanceCalculation(aircraft24L, Uthr06R,Vthr06R);
+
 %% TURNING POINT DETECTION
 aircraft24L = turningPointDetection(aircraft24L);
 
