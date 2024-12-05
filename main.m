@@ -2,11 +2,12 @@
 close all
 format long
 dataFilename = 'P3_08_12h.csv';
-% dataMatrix = asterixCSVtoMatrix(dataFilename);
+dataMatrix = asterixCSVtoMatrix(dataFilename);
 %% SEEK DEPARTURES
 departureFilename = 'Inputs P3 - Atenea/2305_02_dep_lebl.xlsx';
 classFilename = 'Inputs P3 - Atenea/Tabla_Clasificacion_aeronaves.xlsx';
 [departures24L, departures06R] = findDepartures(departureFilename, dataMatrix, classFilename);
+clear dataMatrix
 %% PROCESS DATA (conversions and altitude correction)
 workingMatrix24L = asterixDataProcessing(departures24L);
 workingMatrix06R = asterixDataProcessing(departures06R);
@@ -14,7 +15,8 @@ workingMatrix06R = asterixDataProcessing(departures06R);
 aircraft24L = createAircraftVector(workingMatrix24L);
 % Between 08-12 no aircraft depart from 06R
 % aircraft066R = createAircraftVector(workingMatrix06R);
-
+clear workingMatrix24L
+clear workingMatrix06R
 %% INTEREST POINTS STEREOGRAPHIC COORDINATES
 LATthr24L = 41.292219; 
 LONthr24L = 2.103281;
@@ -33,7 +35,7 @@ Hcamping = 0;
 [Ucamping, Vcamping, HsCamping] = singlePointGeodesic2Sterographic(LATcamping,LONcamping,Hcamping);
 %% DISTANCES BETWEEN SUCCESSIVE DEPARTURES
 distances24L = distanceCalculation(aircraft24L, Uthr06R,Vthr06R);
-
+[LoAviolations, RADARviolations, WakeViolations] = separationAnalysis(distances24L);
 %% TURNING POINT DETECTION
 aircraft24L = turningPointDetection(aircraft24L);
 
@@ -42,3 +44,5 @@ aircraft24L = turningPointDetection(aircraft24L);
 
 %% HEIGHT AND IAS ABOVE THRESHOLD
 [aircraft24L] = aboveThresholdData(aircraft24L,Uthr06R,Vthr06R, "P24L");
+
+%% IAS vs HEIGHT ANALYSIS

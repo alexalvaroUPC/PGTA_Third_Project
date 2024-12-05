@@ -2,7 +2,7 @@
 close all
 format long
 dataFilename = 'P3_08_12h.csv';
-% dataMatrix = asterixCSVtoMatrix(dataFilename);
+dataMatrix = asterixCSVtoMatrix(dataFilename);
 %% SEEK DEPARTURES
 departureFilename = 'Inputs P3 - Atenea/2305_02_dep_lebl.xlsx';
 classFilename = 'Inputs P3 - Atenea/Tabla_Clasificacion_aeronaves.xlsx';
@@ -33,10 +33,12 @@ Hcamping = 0;
 [Ucamping, Vcamping, HsCamping] = singlePointGeodesic2Sterographic(LATcamping,LONcamping,Hcamping);
 %% DISTANCES BETWEEN SUCCESSIVE DEPARTURES
 distances24L = distanceCalculation(aircraft24L, Uthr06R,Vthr06R);
+
 %% TURNING POINT DETECTION
 aircraft24L = turningPointDetection(aircraft24L);
 
 %% SONOMETER DISTANCES
 [aircraft24L] = distanceSonometer(aircraft24L,Ucamping,Vcamping);
 
-%%
+%% HEIGHT AND IAS ABOVE THRESHOLD
+[aircraft24L] = aboveThresholdData(aircraft24L,Uthr06R,Vthr06R, "P24L");

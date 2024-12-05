@@ -35,10 +35,7 @@ for i=1:length(headers)
         WakeTypes = dataMatrix(2:end,i);
     elseif (headers(i) == "Class")
         ClassTypes = dataMatrix(2:end,i);
-    elseif (headers(i) == "SID")
-        SIDs = dataMatrix(2:end,i);
-    elseif (headers(i) == "SIDgroup")
-        SIDgroups = dataMatrix(2:end,i);
+    elseif (header)
     end
 end
 
@@ -78,10 +75,10 @@ end
 U = U/1852;
 V = V/1852;
 
-constructedHeaders = ["TIME" "TIME(s)" "LAT" "LON" "Hgeodesic" "U" "V" "Hstereo" "TI" "FL" "BP" "ModeCorrectionC" "RA" "TTA" "IAS" "TOtime" "Wake", "HDG", "Class", "SID", "SIDgroup"];
+constructedHeaders = ["TIME" "TIME(s)" "LAT" "LON" "Hgeodesic" "U" "V" "Hstereo" "TI" "FL" "BP" "ModeCorrectionC" "RA" "TTA" "IAS" "TOtime" "Wake", "HDG", "Class"];
 durationTOtimes = duration(TOtimes);
 [sortedtimes, sortedidx] = sort(durationTOtimes);
-constructedMatrix = [TIME, TIMEseconds, LAT, LON, H, U', V', Hs', TI, FLstring, BPstring, correctedModeC, RA, TTA, IAS, TOtimes, WakeTypes, HDG, ClassTypes, SIDs, SIDgroups]; 
+constructedMatrix = [TIME, TIMEseconds, LAT, LON, H, U', V', Hs', TI, FLstring, BPstring, correctedModeC, RA, TTA, IAS, TOtimes, WakeTypes, HDG, ClassTypes]; 
 
 % sortedByTOtime = [constructedHeaders; sortrows(constructedMatrix,16)];
 
