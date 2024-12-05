@@ -31,9 +31,9 @@ switch shape
             myAC = aircraft(i);
             k = 1;
             m = 1;
-            in = inpolygon(myAC.Uinterp, myAC.Vinterp, studyArea.Vertices(:,1), studyArea.Vertices(:,2));
-            aircraft(i).ThrIAS = myAC.IASinterp(in);
-            aircraft(i).ThrAlt = myAC.AltInterp(in);
+            [in, on] = inpolygon(myAC.Uinterp, myAC.Vinterp, studyArea.Vertices(:,1), studyArea.Vertices(:,2));
+            aircraft(i).ThrIAS = mean(myAC.IASinterp([in, on]));
+            aircraft(i).ThrAlt = mean(myAC.AltInterp([in, on]));
             for j = 1:numel(myAC.IASinterp)
                 if myAC.Uinterp(j) > -400
                     dist2Thr = sqrt((myAC.Uinterp(j)-U)^2+(myAC.Vinterp(j)-V)^2);

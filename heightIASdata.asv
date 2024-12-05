@@ -1,0 +1,4 @@
+function [aircraft] = heightIASdata(aircraft)
+for i = 1:numel(aircraft)
+    IAS8500 = aircraft.IA
+end

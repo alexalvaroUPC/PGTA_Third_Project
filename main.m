@@ -20,11 +20,11 @@ clear workingMatrix06R
 %% INTEREST POINTS STEREOGRAPHIC COORDINATES
 LATthr24L = 41.292219; 
 LONthr24L = 2.103281;
-Hthr24L = 4;
+Hthr24L = 8*0.3048;
 
 LATthr06R = 41.282311;
 LONthr06R = 2.07435;
-Hthr06R = 4;
+Hthr06R = 8*0.3048;
 
 LATcamping = 41.2719444444440;
 LONcamping = 2.04777777778;
@@ -46,3 +46,28 @@ aircraft24L = turningPointDetection(aircraft24L);
 [aircraft24L] = aboveThresholdData(aircraft24L,Uthr06R,Vthr06R, "P24L");
 
 %% IAS vs HEIGHT ANALYSIS
+aircraft24L = heightIASdata(aircraft24L);
+
+%% Interp1 vs IVV interpolation
+sampleAlt = aircraft24L(3).Alt*100;
+IVV = aircraft24L(3).IVV;
+j = 1;
+for i = 1:numel(sampleAlt)
+    interpolatedAlt(j) = sampleAlt(i);
+    interpolatedAlt(j+1) = sampleAlt(i) + IVV(i)/60;
+    interpolatedAlt(j+2) = sampleAlt(i) + IVV(i)/30;
+    interpolatedAlt(j+3) = sampleAlt(i) + IVV(i)/20;
+    j = j +4;
+end
+mbinterpAlt = aircraft24L(3).AltInterp*100;
+figure
+subplot(121)
+plot(interpolatedAlt);
+title("Suggested interpolation using IVV")
+subplot(122)
+plot(mbinterpAlt(14:491));
+title("Matlab interpolation using Alt")
+% Matlab interpolation shows good results and gets rid of NaN values that
+% would appear using IVV. Therefore, we have decided to use interp1() to
+% interpolate desired values due to its simplicity and ease of
+% implementation.

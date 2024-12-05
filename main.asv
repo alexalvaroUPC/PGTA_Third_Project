@@ -7,6 +7,7 @@ dataMatrix = asterixCSVtoMatrix(dataFilename);
 departureFilename = 'Inputs P3 - Atenea/2305_02_dep_lebl.xlsx';
 classFilename = 'Inputs P3 - Atenea/Tabla_Clasificacion_aeronaves.xlsx';
 [departures24L, departures06R] = findDepartures(departureFilename, dataMatrix, classFilename);
+clear dataMatrix
 %% PROCESS DATA (conversions and altitude correction)
 workingMatrix24L = asterixDataProcessing(departures24L);
 workingMatrix06R = asterixDataProcessing(departures06R);
@@ -14,15 +15,16 @@ workingMatrix06R = asterixDataProcessing(departures06R);
 aircraft24L = createAircraftVector(workingMatrix24L);
 % Between 08-12 no aircraft depart from 06R
 % aircraft066R = createAircraftVector(workingMatrix06R);
-
+clear workingMatrix24L
+clear workingMatrix06R
 %% INTEREST POINTS STEREOGRAPHIC COORDINATES
 LATthr24L = 41.292219; 
 LONthr24L = 2.103281;
-Hthr24L = 4;
+Hthr24L = 8*0.3048;
 
 LATthr06R = 41.282311;
 LONthr06R = 2.07435;
-Hthr06R = 4;
+Hthr06R = 8*0.3048;
 
 LATcamping = 41.2719444444440;
 LONcamping = 2.04777777778;
@@ -33,7 +35,7 @@ Hcamping = 0;
 [Ucamping, Vcamping, HsCamping] = singlePointGeodesic2Sterographic(LATcamping,LONcamping,Hcamping);
 %% DISTANCES BETWEEN SUCCESSIVE DEPARTURES
 distances24L = distanceCalculation(aircraft24L, Uthr06R,Vthr06R);
-
+[LoAviolations, RADARviolations, WakeViolations] = separationAnalysis(distances24L);
 %% TURNING POINT DETECTION
 aircraft24L = turningPointDetection(aircraft24L);
 
@@ -42,3 +44,23 @@ aircraft24L = turningPointDetection(aircraft24L);
 
 %% HEIGHT AND IAS ABOVE THRESHOLD
 [aircraft24L] = aboveThresholdData(aircraft24L,Uthr06R,Vthr06R, "P24L");
+
+%% IAS vs HEIGHT ANALYSIS
+aircraft24L = heightIASdata(aircraft24L);
+
+%% Interp1 vs IVV interpolation
+sampleAlt = aircraft24L(3).Alt*100;
+IVV = aircraft24L(3).IVV;
+j = 1;
+for i = 1:numel(sampleAlt)
+    interpolatedAlt(j) = sampleAlt(i);
+    interpolatedAlt(j+1) = sampleAlt(i) + IVV(i)/60;
+    interpolatedAlt(j+2) = sampleAlt(i) + IVV(i)/30;
+    interpolatedAlt(j+3) = sampleAlt(i) + IVV(i)/20;
+    j = j +4;
+end
+mbinterpAlt = aircraft24L(3).AltInterp*100;
+validinterpolation = [interpolatedAlt(1:409) interpolatedAlt(413:end)]; %Remove NaN valy
+mbinterpAlt(14:491)
+mbinterpAlt(14:490)
+plot(ans-validinterpolation)

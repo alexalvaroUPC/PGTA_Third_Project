@@ -17,7 +17,7 @@ for i = 2:size(dataMatrix,1)
         AC(k).TIMEseconds(j) = str2double(dataMatrix(i,2));
         AC(k).LAT(j) = str2double(dataMatrix(i,3));
         AC(k).LON(j) = str2double(dataMatrix(i,4));
-        AC(k).H(j) = dataMatrix(i,5);
+        % AC(k).H(j) = dataMatrix(i,5);
         AC(k).U(j) = str2double(dataMatrix(i,6));
         AC(k).V(j) = str2double(dataMatrix(i,7));
         AC(k).Hs(j) = dataMatrix(i,8);
@@ -26,6 +26,7 @@ for i = 2:size(dataMatrix,1)
         AC(k).TTA(j) = dataMatrix(i,14);
         AC(k).IAS(j) = str2double(dataMatrix(i,15));
         AC(k).HDG(j) = str2double(dataMatrix(i,18));
+        AC(k).IVV(j) = str2double(dataMatrix(i,22));
         j = j+1;
     else
         j = 1;

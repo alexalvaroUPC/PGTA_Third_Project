@@ -7,11 +7,13 @@ for i = 2:numel(aircrafts)
     distances(i-1).ClassesInvolved = firstAC.Class + "_" + secondAC.Class;
     distances(i-1).SIDsInvolved = firstAC.SID + "_" + secondAC.SID;
     distances(i-1).SIDgroupsInvolved = firstAC.SIDgroup + "_" + secondAC.SIDgroup;
+    applicable = false;
     k=1;
     crossed05NM = false;
     for j = 1:numel(firstAC.Uinterp)
         if sqrt((secondAC.Uinterp(j)-UrwyDER)^2+(secondAC.Vinterp(j)-VrwyDER)^2) >= 0.5
             if(firstAC.Uinterp(j)>-400)&&(secondAC.Uinterp(j)>-400)
+                applicable = true;
                 distances(i-1).Separations(k) = sqrt((firstAC.Uinterp(j)-secondAC.Uinterp(j))^2+(firstAC.Vinterp(j)-secondAC.Vinterp(j))^2);
                 if ~crossed05NM
                     distances(i-1).TWRseparation =  distances(i-1).Separations(k);
@@ -21,5 +23,6 @@ for i = 2:numel(aircrafts)
             end
         end
     end
+    distances(i-1).Applicability = applicable;
 end
 end

@@ -57,7 +57,6 @@ for i = 1:numel(separations)
             infringementsRADAR(k).SameSIDgroup = issameSIDgroup;
             infringementsRADAR(k).CriticalSeparation = closestDistance;
             infringementsRADAR(k).RequiredSeparation = minSep;
-            infringementsRADAR(k).Separations = currentSep.Separations;
             k = k+1;
         end
     end
@@ -93,7 +92,6 @@ for i = 1:numel(separations)
                 infringementsWake(k).SameSIDgroup = issameSIDgroup;
                 infringementsWake(k).CriticalSeparation = closestDistance;
                 infringementsWake(k).RequiredSeparation = minSep;
-                infringementsWake(k).Separations = currentSep.Separations;
                 k = k+1;
             end
         end

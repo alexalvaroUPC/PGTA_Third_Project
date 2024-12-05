@@ -39,12 +39,14 @@ for i=1:length(headers)
         SIDs = dataMatrix(2:end,i);
     elseif (headers(i) == "SIDgroup")
         SIDgroups = dataMatrix(2:end,i);
+    elseif (headers(i) == "IVV")
+        IVV = dataMatrix(2:end,i);
     end
 end
 
 LAT = str2double(strrep(LAT, ',', '.')); LON = str2double(strrep(LON, ',', '.')); H = str2double(strrep(H, ',', '.')); 
 FLstring = strrep(FLstring, ',', '.'); BPstring = strrep(BPstring, ',', '.'); 
-HDG = str2double(strrep(HDG,',','.')); IAS = str2double(strrep(IAS,',','.'));
+HDG = str2double(strrep(HDG,',','.')); IAS = str2double(strrep(IAS,',','.')); IVV = str2double(strrep(IVV, ',', '.'));
 HDG(HDG<0) = HDG(HDG<0) + 360;
 [Xg, Yg, Zg] = geodesic2geocentric(LAT, LON, H);
 [Xs, Ys, Zs] = geocentric2cartesian(Xg, Yg, Zg);
@@ -78,10 +80,10 @@ end
 U = U/1852;
 V = V/1852;
 
-constructedHeaders = ["TIME" "TIME(s)" "LAT" "LON" "Hgeodesic" "U" "V" "Hstereo" "TI" "FL" "BP" "ModeCorrectionC" "RA" "TTA" "IAS" "TOtime" "Wake", "HDG", "Class", "SID", "SIDgroup"];
+constructedHeaders = ["TIME" "TIME(s)" "LAT" "LON" "Hgeodesic" "U" "V" "Hstereo" "TI" "FL" "BP" "ModeCorrectionC" "RA" "TTA" "IAS" "TOtime" "Wake", "HDG", "Class", "SID", "SIDgroup", "IVV"];
 durationTOtimes = duration(TOtimes);
 [sortedtimes, sortedidx] = sort(durationTOtimes);
-constructedMatrix = [TIME, TIMEseconds, LAT, LON, H, U', V', Hs', TI, FLstring, BPstring, correctedModeC, RA, TTA, IAS, TOtimes, WakeTypes, HDG, ClassTypes, SIDs, SIDgroups]; 
+constructedMatrix = [TIME, TIMEseconds, LAT, LON, H, U', V', Hs', TI, FLstring, BPstring, correctedModeC, RA, TTA, IAS, TOtimes, WakeTypes, HDG, ClassTypes, SIDs, SIDgroups, IVV]; 
 
 % sortedByTOtime = [constructedHeaders; sortrows(constructedMatrix,16)];
 
