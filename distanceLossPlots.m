@@ -230,3 +230,59 @@ function rgb = hex2rgb(hex)
     hex = char(hex);
     rgb = reshape(sscanf(hex(2:end), '%2x') / 255, 1, 3);
 end
+
+%% ANALYSIS OF WAKE VIOLATIONS - 24L
+
+% Convert 'InfractorWake' and 'VictimWake' to cell arrays to count frequencies
+infractorWake = {WakeViolations24L.InfractorWake};
+victimWake = {WakeViolations24L.VictimWake};
+
+% Get unique categories for InfractorWake and VictimWake
+[infractorWakeCategories, ~, infractorWakeIndex] = unique(infractorWake);
+[victimWakeCategories, ~, victimWakeIndex] = unique(victimWake);
+
+% Count occurrences for each category
+infractorWakeCount = histcounts(infractorWakeIndex, 'BinMethod', 'auto');
+victimWakeCount = histcounts(victimWakeIndex, 'BinMethod', 'auto');
+
+% Function to assign colors based on value
+assignColor = @(count, minCount, maxCount) ...
+    (count == minCount) * [95, 255, 116] / 255 + ...
+    (count == maxCount) * [254, 64, 64] / 255 + ...            
+    (count > minCount && count < maxCount) * [255, 233, 123] / 255;
+
+% Get min and max values
+minInfractorWakeCount = min(infractorWakeCount);
+maxInfractorWakeCount = max(infractorWakeCount);
+minVictimWakeCount = min(victimWakeCount);
+maxVictimWakeCount = max(victimWakeCount);
+
+% Create subplot
+figure;
+
+% Subplot 1: InfractorWake
+subplot(1, 2, 1);
+hold on;
+for i = 1:length(infractorWakeCount)
+    bar(i, infractorWakeCount(i), 'FaceColor',...
+        assignColor(infractorWakeCount(i), minInfractorWakeCount,...
+        maxInfractorWakeCount));
+end
+title('InfractorWake Frequencies','FontName','Times New Roman');
+xticks(1:length(infractorWakeCategories));
+xticklabels(cellstr(infractorWakeCategories));
+ylabel('Count','FontName','Times New Roman');
+
+% Subplot 2: VictimWake
+subplot(1, 2, 2);
+hold on;
+for i = 1:length(victimWakeCount)
+    bar(i, victimWakeCount(i), 'FaceColor',...
+        assignColor(victimWakeCount(i),...
+        minVictimWakeCount, maxVictimWakeCount));
+end
+title('VictimWake Frequencies','FontName','Times New Roman');
+xticks(1:length(victimWakeCategories));
+xticklabels(cellstr(victimWakeCategories));
+ylabel('Count','FontName','Times New Roman');
+
