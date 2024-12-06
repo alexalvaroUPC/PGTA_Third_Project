@@ -26,8 +26,10 @@ for i = 2:numel(aircrafts)
             if(firstAC.Uinterp(j)>-400)&&(secondAC.Uinterp(j)>-400)
                 applicable = true;
                 distances(i-1).Separations(k) = sqrt((firstAC.Uinterp(j)-secondAC.Uinterp(j))^2+(firstAC.Vinterp(j)-secondAC.Vinterp(j))^2);
+                distances(i-1).timeInstants(k) = duration(seconds(tVector(j)),'Format','hh:mm:ss.SSS');
                 if ~crossed05NM
                     distances(i-1).TWRseparation =  distances(i-1).Separations(k);
+                    distances(i-1).TWRtime = duration(seconds(tVector(j)), 'Format','hh:mm:ss.SSS');
                     crossed05NM = true;
                 end
                 k = k+1;

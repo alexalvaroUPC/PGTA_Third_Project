@@ -31,6 +31,7 @@ for i = 1:numel(separations)
             infringementsLoA(k).SameSIDgroup = issameSIDgroup;
             infringementsLoA(k).Separation = currentSep.TWRseparation;
             infringementsLoA(k).RequiredSeparation = minSep;
+            infringementsLoA(k).TimeOfInfraction = currentSep.TWRtime;
             loaflag = true;
             k = k+1;
         end
@@ -52,7 +53,7 @@ for i = 1:numel(separations)
     issameSIDgroup = firstACSIDgroup(2) == secondACSIDgroup(2);
     minSep = 3;
     if ~isempty(currentSep.Separations)
-        closestDistance = min(currentSep.Separations);
+        [closestDistance, closestIdx] = min(currentSep.Separations);
         if closestDistance < minSep
             infringementsRADAR(k).Infractor = secondACcs;
             infringementsRADAR(k).InfractorSID = secondACSID;
@@ -61,6 +62,7 @@ for i = 1:numel(separations)
             infringementsRADAR(k).SameSIDgroup = issameSIDgroup;
             infringementsRADAR(k).CriticalSeparation = closestDistance;
             infringementsRADAR(k).RequiredSeparation = minSep;
+            infringementsRADAR(k).CriticalInstant = currentSep.timeInstants(closestIdx);
             radarflag = true;
             k = k+1;
         end
@@ -86,7 +88,7 @@ for i = 1:numel(separations)
     minSep = obtainWakeDistance(firstACwake, secondACwake);
     if ~isempty(currentSep.Separations)
         if minSep ~= -1
-            closestDistance = min(currentSep.Separations);
+            [closestDistance, closestIdx] = min(currentSep.Separations);
             if closestDistance < minSep
                 infringementsWake(k).Infractor = secondACcs;
                 infringementsWake(k).InfractorSID = secondACSID;
@@ -97,6 +99,7 @@ for i = 1:numel(separations)
                 infringementsWake(k).SameSIDgroup = issameSIDgroup;
                 infringementsWake(k).CriticalSeparation = closestDistance;
                 infringementsWake(k).RequiredSeparation = minSep;
+                infringementsWake(k).CriticalInstant = currentSep.timeInstants(closestIdx);
                 wakeflag = true;
                 k = k+1;
             end

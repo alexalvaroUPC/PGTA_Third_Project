@@ -9,7 +9,7 @@ dataMatrix = asterixCSVtoMatrix(dataFilename);
 departureFilename = 'Inputs P3 - Atenea/2305_02_dep_lebl.xlsx';
 classFilename = 'Inputs P3 - Atenea/Tabla_Clasificacion_aeronaves.xlsx';
 [departures24L, departures06R] = findDepartures(departureFilename, dataMatrix, classFilename);
-% clear dataMatrix
+clear dataMatrix
 %% PROCESS DATA (conversions and altitude correction)
 workingMatrix24L = asterixDataProcessing(departures24L);
 workingMatrix06R = asterixDataProcessing(departures06R);
@@ -17,8 +17,8 @@ workingMatrix06R = asterixDataProcessing(departures06R);
 [aircraft24L, tVector24L] = createAircraftVector(workingMatrix24L);
 % Between 08-12 no aircraft depart from 06R
 [aircraft06R, tVector06R] = createAircraftVector(workingMatrix06R);
-% clear workingMatrix24L
-% clear workingMatrix06R
+clear workingMatrix24L
+clear workingMatrix06R
 %% INTEREST POINTS STEREOGRAPHIC COORDINATES
 LATthr24L = 41.292219; 
 LONthr24L = 2.103281;
@@ -76,7 +76,7 @@ subplot(121)
 plot(interpolatedAlt);
 title("Suggested interpolation using IVV")
 subplot(122)
-plot(mbinterpAlt(find(mbinterpAlt>-400)));
+plot(mbinterpAlt((mbinterpAlt>-400)));
 title("Matlab interpolation using Alt")
 % Matlab interpolation shows good results and gets rid of NaN values that
 % would appear using IVV. Therefore, we have decided to use interp1() to
