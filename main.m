@@ -49,7 +49,7 @@ aircraft24L = turningPointDetection(aircraft24L, tVector24L);
 
 %% HEIGHT AND IAS ABOVE THRESHOLD
 [aircraft24L] = aboveThresholdData(aircraft24L,Uthr06R,Vthr06R, "P24L", tVector24L);
-[aircraft06R] = aboveThresholdData(aircraft06R, Uthr24L, Vthr24L, "Circle", tVector06R);
+[aircraft06R] = aboveThresholdData(aircraft06R, Uthr24L, Vthr24L, "P06R", tVector06R);
 
 %% IAS vs HEIGHT ANALYSIS
 aircraft24L = heightIASdata(aircraft24L, tVector24L);
