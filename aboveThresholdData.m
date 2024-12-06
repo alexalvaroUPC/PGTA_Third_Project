@@ -1,4 +1,4 @@
-function [aircraft] = aboveThresholdData(aircraft, U, V, shape)
+function [aircraft] = aboveThresholdData(aircraft, U, V, shape, tVector)
 switch shape
     case "Circle"
         RunwayWidth = 60;
@@ -7,8 +7,20 @@ switch shape
         AreaRadius = RunwayWidth/2*extraFactor/1852;
         for i = 1:numel(aircraft)
             myAC = aircraft(i);
+            interpolatedU = smartInterpolation(myAC.TIMEseconds, myAC.U, tVector, myAC.interpStart, myAC.interpEnd);
+            myAC.Uinterp = interpolatedU;
+            interpolatedV = smartInterpolation(myAC.TIMEseconds, myAC.V, tVector, myAC.interpStart, myAC.interpEnd);
+            myAC.Vinterp = interpolatedV;
             k = 1;
             m = 1;
+             if ~all(isnan(myAC.IAS))
+                interpolatedIAS = smartInterpolation(myAC.TIMEseconds, myAC.IAS, tVector, myAC.interpStart, myAC.interpEnd);
+                myAC.IASinterp = interpolatedIAS;
+                if ~all(isnan(myAC.Alt))
+                    interpolatedAlt = smartInterpolation(myAC.TIMEseconds, myAC.Alt, tVector, myAC.interpStart, myAC.interpEnd);
+                    myAC.AltInterp = interpolatedAlt;
+                end
+            end
             for j = 1:numel(myAC.IASinterp)
                 if myAC.Uinterp(j) > -400
                     dist2Thr = sqrt((myAC.Uinterp(j)-U)^2+(myAC.Vinterp(j)-V)^2);
@@ -31,10 +43,24 @@ switch shape
             myAC = aircraft(i);
             k = 1;
             m = 1;
+            interpolatedU = smartInterpolation(myAC.TIMEseconds, myAC.U, tVector, myAC.interpStart, myAC.interpEnd);
+            myAC.Uinterp = interpolatedU;
+            interpolatedV = smartInterpolation(myAC.TIMEseconds, myAC.V, tVector, myAC.interpStart, myAC.interpEnd);
+            myAC.Vinterp = interpolatedV;
+
             [in, on] = inpolygon(myAC.Uinterp, myAC.Vinterp, studyArea.Vertices(:,1), studyArea.Vertices(:,2));
-            aircraft(i).ThrIAS = mean(myAC.IASinterp([in, on]));
-            aircraft(i).ThrAlt = mean(myAC.AltInterp([in, on]));
-            for j = 1:numel(myAC.IASinterp)
+            if ~all(isnan(myAC.IAS))
+                interpolatedIAS = smartInterpolation(myAC.TIMEseconds, myAC.IAS, tVector, myAC.interpStart, myAC.interpEnd);
+                myAC.IASinterp = interpolatedIAS;
+                if ~all(isnan(myAC.Alt))
+                    interpolatedAlt = smartInterpolation(myAC.TIMEseconds, myAC.Alt, tVector, myAC.interpStart, myAC.interpEnd);
+                    myAC.AltInterp = interpolatedAlt;
+                    aircraft(i).ThrIAS = mean(myAC.IASinterp([in, on]));
+                    aircraft(i).ThrAlt = mean(myAC.AltInterp([in, on]));
+                end
+            end
+
+            for j = 1:numel(myAC.Uinterp)
                 if myAC.Uinterp(j) > -400
                     dist2Thr = sqrt((myAC.Uinterp(j)-U)^2+(myAC.Vinterp(j)-V)^2);
                     aircraft(i).ThrDist(m) = dist2Thr;

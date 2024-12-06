@@ -1,4 +1,4 @@
-function [runwayAircrafts] = createAircraftVector(dataMatrix)
+function [runwayAircrafts, tVector] = createAircraftVector(dataMatrix)
 currentCS = dataMatrix(2,9);
 j = 1;
 k = 1;
@@ -32,40 +32,47 @@ for i = 2:size(dataMatrix,1)
         j = 1;
         k = k+1;
     end
-        currentCS = dataMatrix(i,9);
+    currentCS = dataMatrix(i,9);
 
 end
 for i = 1:numel(AC)
     startpoint = find(tVector == AC(i).TIMEseconds(1));
     endpoint = find(tVector == AC(i).TIMEseconds(end));
-
-    interpolatedLAT = interp1(AC(i).TIMEseconds,AC(i).LAT,tVector, 'makima');
-    interpolatedLAT(1:startpoint-1) = -400;
-    interpolatedLAT(endpoint+1:end) = -400;
-    AC(i).LATinterp = interpolatedLAT;
-    interpolatedLON = interp1(AC(i).TIMEseconds,AC(i).LON,tVector, 'makima');
-    interpolatedLON(1:startpoint-1) = -400;
-    interpolatedLON(endpoint+1:end) = -400;
-    AC(i).LONinterp = interpolatedLON;
-    interpolatedU = interp1(AC(i).TIMEseconds,AC(i).U,tVector, 'makima');
-    interpolatedU(1:startpoint-1) = -400;
-    interpolatedU(endpoint+1:end) = -400;
-    AC(i).Uinterp = interpolatedU;
-    interpolatedV = interp1(AC(i).TIMEseconds,AC(i).V,tVector, 'makima');
-    interpolatedV(1:startpoint-1) = -400;
-    interpolatedV(endpoint+1:end) = -400;
-    AC(i).Vinterp = interpolatedV;
-    interpolatedAlt = interp1(AC(i).TIMEseconds,AC(i).Alt,tVector, 'makima');
-    interpolatedAlt(1:startpoint-1) = -400;
-    interpolatedAlt(endpoint+1:end) = -400;
-    AC(i).AltInterp = interpolatedAlt;
-    interpolatedIAS = interp1(AC(i).TIMEseconds,AC(i).IAS,tVector, 'makima');
-    interpolatedIAS(1:startpoint-1) = -400;
-    interpolatedIAS(endpoint+1:end) = -400;
-    AC(i).IASinterp = interpolatedIAS;
-    interpolatedHDG = interp1(AC(i).TIMEseconds,AC(i).HDG,tVector, 'makima');
-    interpolatedHDG(1:startpoint-1) = -400;
-    interpolatedHDG(endpoint+1:end) = -400;
-    AC(i).HDGinterp = interpolatedHDG;
+    AC(i).interpStart = startpoint;
+    AC(i).interpEnd = endpoint;
+    % interpolatedLAT = interp1(AC(i).TIMEseconds,AC(i).LAT,tVector, 'makima');
+    % interpolatedLAT(1:startpoint-1) = -400;
+    % interpolatedLAT(endpoint+1:end) = -400;
+    % AC(i).LATinterp = interpolatedLAT;
+    % interpolatedLON = interp1(AC(i).TIMEseconds,AC(i).LON,tVector, 'makima');
+    % interpolatedLON(1:startpoint-1) = -400;
+    % interpolatedLON(endpoint+1:end) = -400;
+    % AC(i).LONinterp = interpolatedLON;
+    % interpolatedU = interp1(AC(i).TIMEseconds,AC(i).U,tVector, 'makima');
+    % interpolatedU(1:startpoint-1) = -400;
+    % interpolatedU(endpoint+1:end) = -400;
+    % AC(i).Uinterp = interpolatedU;
+    % interpolatedV = interp1(AC(i).TIMEseconds,AC(i).V,tVector, 'makima');
+    % interpolatedV(1:startpoint-1) = -400;
+    % interpolatedV(endpoint+1:end) = -400;
+    % AC(i).Vinterp = interpolatedV;
+    % if ~all(isnan(AC(i).Alt))
+    %     interpolatedAlt = interp1(AC(i).TIMEseconds,AC(i).Alt,tVector, 'makima');
+    %     interpolatedAlt(1:startpoint-1) = -400;
+    %     interpolatedAlt(endpoint+1:end) = -400;
+    %     AC(i).AltInterp = interpolatedAlt;
+    % end
+    % if ~all(isnan(AC(i).IAS))
+    %     interpolatedIAS = interp1(AC(i).TIMEseconds,AC(i).IAS,tVector, 'makima');
+    %     interpolatedIAS(1:startpoint-1) = -400;
+    %     interpolatedIAS(endpoint+1:end) = -400;
+    %     AC(i).IASinterp = interpolatedIAS;
+    % end
+    % if ~all(isnan(AC(i).HDG))
+    %     interpolatedHDG = interp1(AC(i).TIMEseconds,AC(i).HDG,tVector, 'makima');
+    %     interpolatedHDG(1:startpoint-1) = -400;
+    %     interpolatedHDG(endpoint+1:end) = -400;
+    %     AC(i).HDGinterp = interpolatedHDG;
+    % end
 end
 runwayAircrafts = AC;

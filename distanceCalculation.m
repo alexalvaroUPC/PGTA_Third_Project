@@ -1,4 +1,4 @@
-function [distances] = distanceCalculation(aircrafts, UrwyDER, VrwyDER)
+function [distances] = distanceCalculation(aircrafts, UrwyDER, VrwyDER, tVector)
 for i = 2:numel(aircrafts)
     firstAC = aircrafts(i-1);
     secondAC = aircrafts(i);
@@ -10,6 +10,17 @@ for i = 2:numel(aircrafts)
     applicable = false;
     k=1;
     crossed05NM = false;
+
+    interpolatedU = smartInterpolation(firstAC.TIMEseconds, firstAC.U, tVector, firstAC.interpStart, firstAC.interpEnd);
+    firstAC.Uinterp = interpolatedU;
+    interpolatedV = smartInterpolation(firstAC.TIMEseconds, firstAC.V, tVector, firstAC.interpStart, firstAC.interpEnd);
+    firstAC.Vinterp = interpolatedV;
+
+    interpolatedU = smartInterpolation(secondAC.TIMEseconds, secondAC.U, tVector, secondAC.interpStart, secondAC.interpEnd);
+    secondAC.Uinterp = interpolatedU;
+    interpolatedV = smartInterpolation(secondAC.TIMEseconds, secondAC.V, tVector, secondAC.interpStart, secondAC.interpEnd);
+    secondAC.Vinterp = interpolatedV;
+
     for j = 1:numel(firstAC.Uinterp)
         if sqrt((secondAC.Uinterp(j)-UrwyDER)^2+(secondAC.Vinterp(j)-VrwyDER)^2) >= 0.5
             if(firstAC.Uinterp(j)>-400)&&(secondAC.Uinterp(j)>-400)

@@ -1,5 +1,8 @@
 function [infringementsLoA, infringementsRADAR, infringementsWake] = separationAnalysis(separations)
 % LoA analysis
+loaflag = false;
+radarflag = false;
+wakeflag = false;
 k = 1;
 for i = 1:numel(separations)
     currentSep = separations(i);
@@ -28,6 +31,7 @@ for i = 1:numel(separations)
             infringementsLoA(k).SameSIDgroup = issameSIDgroup;
             infringementsLoA(k).Separation = currentSep.TWRseparation;
             infringementsLoA(k).RequiredSeparation = minSep;
+            loaflag = true;
             k = k+1;
         end
     end
@@ -57,6 +61,7 @@ for i = 1:numel(separations)
             infringementsRADAR(k).SameSIDgroup = issameSIDgroup;
             infringementsRADAR(k).CriticalSeparation = closestDistance;
             infringementsRADAR(k).RequiredSeparation = minSep;
+            radarflag = true;
             k = k+1;
         end
     end
@@ -92,8 +97,18 @@ for i = 1:numel(separations)
                 infringementsWake(k).SameSIDgroup = issameSIDgroup;
                 infringementsWake(k).CriticalSeparation = closestDistance;
                 infringementsWake(k).RequiredSeparation = minSep;
+                wakeflag = true;
                 k = k+1;
             end
         end
     end
+end
+if ~loaflag
+    infringementsLoA = "None";
+end
+if ~radarflag
+    infringementsRADAR = "None";
+end
+if ~wakeflag
+    infringementsWake = "None";
 end

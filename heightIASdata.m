@@ -1,7 +1,13 @@
-function [aircraft] = heightIASdata(aircraft)
+function [aircraft] = heightIASdata(aircraft, tVector)
 for i = 1:numel(aircraft)
-
-    aircraft(i).IAS850 = median(aircraft(i).IASinterp(aircraft(i).AltInterp> 8.2 & aircraft(i).AltInterp< 8.8));
-    aircraft(i).IAS1500 = median(aircraft(i).IASinterp(aircraft(i).AltInterp> 14.7 & aircraft(i).AltInterp< 15.3));
-    aircraft(i).IAS3000 = median(aircraft(i).IASinterp(aircraft(i).AltInterp> 29.7 & aircraft(i).AltInterp< 30.3));
+    myAC = aircraft(i);
+    if ~all(isnan(myAC.IAS))
+        interpolatedIAS = smartInterpolation(myAC.TIMEseconds, myAC.IAS, tVector, myAC.interpStart, myAC.interpEnd);
+        if ~all(isnan(aircraft(i).Alt))
+            interpolatedAlt = smartInterpolation(myAC.TIMEseconds, myAC.Alt, tVector, myAC.interpStart, myAC.interpEnd);
+            aircraft(i).IAS850 = median(interpolatedIAS(interpolatedAlt> 8.2 & interpolatedAlt< 8.8));
+            aircraft(i).IAS1500 = median(interpolatedIAS(interpolatedAlt> 14.7 & interpolatedAlt< 15.3));
+            aircraft(i).IAS3000 = median(interpolatedIAS(interpolatedAlt> 29.7 & interpolatedAlt< 30.3));
+        end
+    end
 end
