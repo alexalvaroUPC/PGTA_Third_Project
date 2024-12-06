@@ -31,7 +31,7 @@ for i = 1:numel(separations)
             infringementsLoA(k).SameSIDgroup = issameSIDgroup;
             infringementsLoA(k).Separation = currentSep.TWRseparation;
             infringementsLoA(k).RequiredSeparation = minSep;
-            infringementsLoA(k).TimeOfInfraction = currentSep.TWRtime;
+            infringementsLoA(k).TimeOfInfraction = curr.TWRtime;
             loaflag = true;
             k = k+1;
         end
@@ -99,7 +99,7 @@ for i = 1:numel(separations)
                 infringementsWake(k).SameSIDgroup = issameSIDgroup;
                 infringementsWake(k).CriticalSeparation = closestDistance;
                 infringementsWake(k).RequiredSeparation = minSep;
-                infringementsWake(k).CriticalInstant = currentSep.timeInstants(closestIdx);
+                infringementsWake(k).CriticalInstant = separations.timeInstants(closestIdx);
                 wakeflag = true;
                 k = k+1;
             end
