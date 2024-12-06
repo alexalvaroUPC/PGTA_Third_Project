@@ -1,0 +1,105 @@
+%% VECTOR PREPARATION
+k = 1;
+for i = 1:numel(aircraft24L)
+    if ~isempty(aircraft24L(i).IAS850)
+        if (aircraft24L(i).IAS850 > 0) && (aircraft24L(i).IAS1500 > 0) && (aircraft24L(i).IAS3000 > 0)
+            Callsigns24L(k) = [aircraft24L(i).Callsign];
+            IAS850_24L(k) = [aircraft24L(i).IAS850];
+            IAS1500_24L(k) = [aircraft24L(i).IAS1500];
+            IAS3000_24L(k) = [aircraft24L(i).IAS3000];
+            SIDs_24L(k) = [aircraft24L(i).SID];
+            SIDgroups_24L(k) = [aircraft24L(i).SIDgroup];
+            k = k+1;
+        end
+    end
+end
+%% DATA CLASSIFICATION
+[~, SIDgroupidx, ~] = find(SIDgroups_24L == "G1");
+G1IAS85024L = IAS850_24L(SIDgroupidx);
+G1IAS150024L = IAS1500_24L(SIDgroupidx);
+G1IAS300024L = IAS3000_24L(SIDgroupidx);
+[~, SIDgroupidx, ~] = find(SIDgroups_24L == "G2");
+G2IAS85024L = IAS850_24L(SIDgroupidx);
+G2IAS150024L = IAS1500_24L(SIDgroupidx);
+G2IAS300024L = IAS3000_24L(SIDgroupidx);
+[~, SIDgroupidx, ~] = find(SIDgroups_24L == "G3");
+G3IAS85024L = IAS850_24L(SIDgroupidx);
+G3IAS150024L = IAS1500_24L(SIDgroupidx);
+G3IAS300024L = IAS3000_24L(SIDgroupidx);
+
+%% FASTEST AND SLOWEST
+[max850, idx850max] = max(IAS850_24L);
+[min850, idx850min] = min(IAS850_24L);
+fastest24L850 = Callsigns24L(idx850max);
+slowest24L850 = Callsigns24L(idx850min);
+
+[max1500, idx1500max] = max(IAS1500_24L);
+[min1500, idx1500min] = min(IAS1500_24L);
+fastest24L1500 = Callsigns24L(idx1500max);
+slowest24L1500 = Callsigns24L(idx1500min);
+
+[max3000, idx3000max] = max(IAS3000_24L);
+[min3000, idx3000min] = min(IAS3000_24L);
+fastest24L3000 = Callsigns24L(idx3000max);
+slowest24L3000 = Callsigns24L(idx3000min);
+
+%% 
+%% Histogram for all A/C
+figure
+subplot(131)
+histogram(IAS850_24L)
+ylabel("Count")
+xlabel("IAS [kt]")
+title('IAS @850ft histogram')
+subplot(132)
+histogram(IAS1500_24L)
+ylabel("Count")
+xlabel("IAS [kt]")
+title('IAS @1500ft histogram')
+subplot(133)
+histogram(IAS3000_24L)
+ylabel("Count")
+xlabel("IAS [kt]")
+title('IAS @3000ft histogram')
+%% Histograms by SID @850ft
+figure
+subplot(131)
+histogram(G1IAS85024L, 'Normalization','count')
+title('SID Group 1, IAS @850ft histogram')
+xlabel("IAS [kt]")
+subplot(132)
+histogram(G2IAS85024L, 'Normalization','count')
+title('SID Group 2, IAS @850ft histogram')
+xlabel("IAS [kt]")
+subplot(133)
+histogram(G3IAS85024L, 'Normalization','count')
+title('SID Group 3, IAS @850ft histogram')
+xlabel("IAS [kt]")
+%% Histograms by SID @1500ft
+figure
+subplot(131)
+histogram(G1IAS150024L, 'Normalization','count')
+title('SID Group 1, IAS @1500ft histogram')
+xlabel("IAS [kt]")
+subplot(132)
+histogram(G2IAS150024L, 'Normalization','count')
+title('SID Group 2, IAS @1500ft histogram')
+xlabel("IAS [kt]")
+subplot(133)
+histogram(G3IAS150024L, 'Normalization','count')
+title('SID Group 3, IAS @1500ft histogram')
+xlabel("IAS [kt]")
+%% Histograms by SID @3000ft
+figure
+subplot(131)
+histogram(G1IAS300024L, 'Normalization','count')
+title('SID Group 1, IAS @3000ft histogram')
+xlabel("IAS [kt]")
+subplot(132)
+histogram(G2IAS300024L, 'Normalization','count')
+title('SID Group 2, IAS @3000ft histogram')
+xlabel("IAS [kt]")
+subplot(133)
+histogram(G3IAS300024L, 'Normalization','count')
+title('SID Group 3, IAS @3000ft histogram')
+xlabel("IAS [kt]")
