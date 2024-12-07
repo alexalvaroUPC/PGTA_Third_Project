@@ -64,7 +64,7 @@ aircraft06R = heightIASdata(aircraft06R, tVector06R);
 savename = "mydata_" + dataFilename + ".mat";
 save(savename, "aircraft24L", "aircraft06R", "distances24L", "distances06R", "LoAviolations24L", "LoAviolations06R", "RADARviolations24L", "RADARviolations06R", "WakeViolations24L", "WakeViolations06R");
 % savename = "mydata_" + dataFilename + "1.mat";
-% save(savename, "aircraft24L", "tVector24L");
+% save(savename, "aircraft24L", "aircraft06R", "tVector24L");
 
 %% Interp1 vs IVV interpolation
 sampleAlt = aircraft24L(3).Alt*100;

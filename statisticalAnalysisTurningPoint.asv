@@ -20,7 +20,7 @@ for i = 1:numel(aircraft24L)
         end
     end
 end
-clear aircraft24L
+% clear aircraft24L
 %% DATA CLASSIFICATION
 [~, SIDgroupidx, ~] = find(SIDgroups == "G1");
 G1TurningLAT = TurningLAT(SIDgroupidx);
@@ -88,7 +88,7 @@ G1.meanCriticalRadial = mean(G1CriticalRadial);
 % G1.desvTurningLAT = std(G1TurningLAT);
 G1.desvTurningAlt = std(G1TurningAlt);
 G1.desvTurningRadial = std(G1TurningRadial);
-G1.desvCriticalRadial = std(G1CriticalRadial);
+G1.desvCriticalRadial = desv(G1CriticalRadial);
 % G1.p95_TurningLON = prctile(G1TurningLON, 95);
 % G1.p95_TurningLAT = prctile(G1TurningLAT, 95);
 G1.p95_TurningAlt = prctile(G1TurningAlt, 95);
@@ -104,7 +104,7 @@ G2.meanCriticalRadial = mean(G2CriticalRadial);
 % G2.desvTurningLAT = std(G2TurningLAT);
 G2.desvTurningAlt = std(G2TurningAlt);
 G2.desvTurningRadial = std(G2TurningRadial);
-G2.desvCriticalRadial = std(G2CriticalRadial);
+G2.desvCriticalRadial = desv(G2CriticalRadial);
 % G2.p95_TurningLON = prctile(G2TurningLON, 95);
 % G2.p95_TurningLAT = prctile(G2TurningLAT, 95);
 G2.p95_TurningAlt = prctile(G2TurningAlt, 95);
@@ -120,7 +120,7 @@ G3.meanCriticalRadial = mean(G3CriticalRadial);
 % G3.desvTurningLAT = std(G3TurningLAT);
 G3.desvTurningAlt = std(G3TurningAlt);
 G3.desvTurningRadial = std(G3TurningRadial);
-G3.desvCriticalRadial = std(G3CriticalRadial);
+G3.desvCriticalRadial = desv(G3CriticalRadial);
 % G3.p95_TurningLON = prctile(G3TurningLON, 95);
 % G3.p95_TurningLAT = prctile(G3TurningLAT, 95);
 G3.p95_TurningAlt = prctile(G3TurningAlt, 95);
@@ -167,7 +167,7 @@ subplot(133)
 histogram(G3TurningRadial, 'Normalization','count')
 title('SID Group 3, Radial at turning point')
 xlabel("Radial [º]")
-%% Histograms by SID Radial critical
+%% Histograms by SID Radial
 figure
 subplot(131)
 histogram(G1CriticalRadial, 'Normalization','count')
