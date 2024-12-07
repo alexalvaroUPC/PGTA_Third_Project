@@ -13,21 +13,37 @@ violationsPerType06R = [length(LoAviolations06R), length(RADARviolations06R),...
 
 typeOfViolation= {'LoA', 'Radar', 'Wake'};
 
-%% NUMBER OF VIOLATIONS AND DISTRIBUTION - 24L
+%% NUMBER OF VIOLATIONS AND DISTRIBUTION
 figure;
 subplot(1,2,1)
 bar(violationsPerType24L);
 set(gca, 'XTickLabel', typeOfViolation);
-title('Distribution of Distance Violations by Type (at 24L)','FontName','Times New Roman');
+title('Distribution of Distance Violations by Type (at 24L)',...
+    'FontName','Times New Roman');
 ylabel('Violations per Day','FontName','Times New Roman');
 xlabel('Type of Violation','FontName','Times New Roman');
+
+for i = 1:length(violationsPerType24L)
+    percentage = (violationsPerType24L(i) / totalViolations24L) * 100;
+    text(i, 7, sprintf('%.1f%%', percentage), ...
+        'HorizontalAlignment', 'center', 'VerticalAlignment', 'top',...
+        'FontSize', 10,'FontName','Times New Roman');
+end
 
 subplot(1,2,2)
 bar(violationsPerType06R);
 set(gca, 'XTickLabel', typeOfViolation);
-title('Distribution of Distance Violations by Type (at 06R)','FontName','Times New Roman');
+title('Distribution of Distance Violations by Type (at 06R)',...
+    'FontName','Times New Roman');
 ylabel('Violations per Day','FontName','Times New Roman');
 xlabel('Type of Violation','FontName','Times New Roman');
+
+for i = 1:length(violationsPerType06R)
+    percentage = (violationsPerType06R(i) / totalViolations06R) * 100;
+    text(i, 0.2, sprintf('%.1f%%', percentage), ...
+        'HorizontalAlignment', 'center', 'VerticalAlignment', 'top',...
+        'FontSize', 10,'FontName','Times New Roman');
+end
 
 %% ANALYSIS OF LoA VIOLATIONS - 24L
 
@@ -106,6 +122,111 @@ set(gca, 'XTickLabel', labels);
 title('Distribution of LoA Infractors by Class (at 24L)','FontName','Times New Roman');
 ylabel('Number of Infractors','FontName','Times New Roman');
 xlabel('Class Types','FontName','Times New Roman');
+
+% Now the SID
+% Subplot 1: Analysis for InfractorSID
+subplot(2, 2, 1);
+
+infractor_counts = groupcounts(string({LoAviolations24L.InfractorSID}'));
+
+[~, worst_idx_1] = max(infractor_counts);
+worst_SID_1 = unique(string({LoAviolations24L.InfractorSID}'));
+worst_SID_1 = worst_SID_1(worst_idx_1);
+
+[~, best_idx_1] = min(infractor_counts);
+best_SID_1 = unique(string({LoAviolations24L.InfractorSID}'));
+best_SID_1 = best_SID_1(best_idx_1);
+
+x_labels_1 = {['Worst: ', char(worst_SID_1)],...
+    ['Best: ', char(best_SID_1)], 'FontName','Times New Roman'};
+y_values_1 = [max(infractor_counts), min(infractor_counts)];
+
+b1 = bar(y_values_1);
+b1.FaceColor = 'flat';
+b1.CData(1, :) = [254, 64, 64] / 255;
+xticks(1:2);
+xticklabels(x_labels_1);
+ylabel('Count', 'FontName','Times New Roman');
+title('InfractorSID Analysis', 'FontName','Times New Roman');
+grid on;
+
+% Subplot 2: Analysis for VictimSID
+subplot(2, 2, 2);
+
+victim_counts = groupcounts(string({LoAviolations24L.VictimSID}'));
+
+[~, worst_idx_2] = max(victim_counts);
+worst_SID_2 = unique(string({LoAviolations24L.VictimSID}'));
+worst_SID_2 = worst_SID_2(worst_idx_2);
+
+[~, best_idx_2] = min(victim_counts);
+best_SID_2 = unique(string({LoAviolations24L.VictimSID}'));
+best_SID_2 = best_SID_2(best_idx_2);
+
+x_labels_2 = {['Worst: ', char(worst_SID_2)],...
+    ['Best: ', char(best_SID_2)], 'FontName','Times New Roman'};
+y_values_2 = [max(victim_counts), min(victim_counts)];
+
+b2 = bar(y_values_2);
+b2.FaceColor = 'flat';
+b2.CData(1, :) = [254, 64, 64] / 255; 
+xticks(1:2);
+xticklabels(x_labels_2);
+ylabel('Count', 'FontName','Times New Roman');
+title('VictimSID Analysis', 'FontName','Times New Roman');
+grid on;
+
+% Subplot 3: Analysis for InfractorClass
+subplot(2, 2, 3);
+
+infractor_class_counts = groupcounts(string({LoAviolations24L.InfractorClass}'));
+
+[~, worst_idx_3] = max(infractor_class_counts);
+worst_class_3 = unique(string({LoAviolations24L.InfractorClass}'));
+worst_class_3 = worst_class_3(worst_idx_3);
+
+[~, best_idx_3] = min(infractor_class_counts);
+best_class_3 = unique(string({LoAviolations24L.InfractorClass}'));
+best_class_3 = best_class_3(best_idx_3);
+
+x_labels_3 = {['Worst: ', char(worst_class_3)],...
+    ['Best: ', char(best_class_3)], 'FontName','Times New Roman'};
+y_values_3 = [max(infractor_class_counts), min(infractor_class_counts)];
+
+b3 = bar(y_values_3);
+b3.FaceColor = 'flat';
+b3.CData(1, :) = [254, 64, 64] / 255;
+xticks(1:2);
+xticklabels(x_labels_3);
+ylabel('Count', 'FontName','Times New Roman');
+title('InfractorClass Analysis', 'FontName','Times New Roman');
+grid on;
+
+%% Subplot 4: Analysis for VictimClass
+subplot(2, 2, 4);
+
+victim_class_counts = groupcounts(string({LoAviolations24L.VictimClass}'));
+
+[~, worst_idx_4] = max(victim_class_counts);
+worst_class_4 = unique(string({LoAviolations24L.VictimClass}'));
+worst_class_4 = worst_class_4(worst_idx_4);
+
+[~, best_idx_4] = min(victim_class_counts);
+best_class_4 = unique(string({LoAviolations24L.VictimClass}'));
+best_class_4 = best_class_4(best_idx_4);
+
+x_labels_4 = {['Worst: ', char(worst_class_4)], ['Best: ', char(best_class_4)]};
+y_values_4 = [max(victim_class_counts), min(victim_class_counts)];
+
+b4 = bar(y_values_4);
+b4.FaceColor = 'flat';
+b4.CData(1, :) = [254, 64, 64] / 255;
+xticks(1:2);
+xticklabels(x_labels_4);
+ylabel('Count');
+title('VictimClass Analysis');
+grid on;
+
 
 
 %% ANALYSIS OF RADAR VIOLATIONS - 24L
@@ -230,3 +351,58 @@ function rgb = hex2rgb(hex)
     hex = char(hex);
     rgb = reshape(sscanf(hex(2:end), '%2x') / 255, 1, 3);
 end
+
+%% ANALYSIS OF WAKE VIOLATIONS - 24L
+
+% Convert 'InfractorWake' and 'VictimWake' to cell arrays to count frequencies
+infractorWake = {WakeViolations24L.InfractorWake};
+victimWake = {WakeViolations24L.VictimWake};
+
+% Get unique categories for InfractorWake and VictimWake
+[infractorWakeCategories, ~, infractorWakeIndex] = unique(infractorWake);
+[victimWakeCategories, ~, victimWakeIndex] = unique(victimWake);
+
+% Count occurrences for each category
+infractorWakeCount = histcounts(infractorWakeIndex, 'BinMethod', 'auto');
+victimWakeCount = histcounts(victimWakeIndex, 'BinMethod', 'auto');
+
+% Function to assign colors based on value
+assignColor = @(count, minCount, maxCount) ...
+    (count == minCount) * [95, 255, 116] / 255 + ...
+    (count == maxCount) * [254, 64, 64] / 255 + ...            
+    (count > minCount && count < maxCount) * [255, 233, 123] / 255;
+
+% Get min and max values
+minInfractorWakeCount = min(infractorWakeCount);
+maxInfractorWakeCount = max(infractorWakeCount);
+minVictimWakeCount = min(victimWakeCount);
+maxVictimWakeCount = max(victimWakeCount);
+
+% Create subplot
+figure;
+
+% Subplot 1: InfractorWake
+subplot(1, 2, 1);
+hold on;
+for i = 1:length(infractorWakeCount)
+    bar(i, infractorWakeCount(i), 'FaceColor',...
+        assignColor(infractorWakeCount(i), minInfractorWakeCount,...
+        maxInfractorWakeCount));
+end
+title('InfractorWake Frequencies','FontName','Times New Roman');
+xticks(1:length(infractorWakeCategories));
+xticklabels(cellstr(infractorWakeCategories));
+ylabel('Count','FontName','Times New Roman');
+
+% Subplot 2: VictimWake
+subplot(1, 2, 2);
+hold on;
+for i = 1:length(victimWakeCount)
+    bar(i, victimWakeCount(i), 'FaceColor',...
+        assignColor(victimWakeCount(i),...
+        minVictimWakeCount, maxVictimWakeCount));
+end
+title('VictimWake Frequencies','FontName','Times New Roman');
+xticks(1:length(victimWakeCategories));
+xticklabels(cellstr(victimWakeCategories));
+ylabel('Count','FontName','Times New Roman');
