@@ -2,7 +2,12 @@
 clear all
 close all
 format long
+% dataFilename = "P3_00-04h.csv";
+% dataFilename = "P3_04_08h.csv";
 % dataFilename = 'P3_08_12h.csv';
+% dataFilename = "P3_12_16h.csv";
+% dataFilename = "P3_16_20h.csv";
+% dataFilename = "P3_20_24h.csv";
 dataFilename = 'P3_00-24h.csv';
 dataMatrix = asterixCSVtoMatrix(dataFilename);
 %% SEEK DEPARTURES
@@ -56,8 +61,10 @@ aircraft24L = heightIASdata(aircraft24L, tVector24L);
 aircraft06R = heightIASdata(aircraft06R, tVector06R);
 
 %% SAVE DATA
-savename = "mydata_" + dataFilename + ".mat";
-save(savename, "aircraft24L", "aircraft06R", "distances24L", "distances06R", "LoAviolations24L", "LoAviolations06R", "RADARviolations24L", "RADARviolations06R", "WakeViolations24L", "WakeViolations06R");
+% savename = "mydata_" + dataFilename + ".mat";
+% save(savename, "aircraft24L", "aircraft06R", "distances24L", "distances06R", "LoAviolations24L", "LoAviolations06R", "RADARviolations24L", "RADARviolations06R", "WakeViolations24L", "WakeViolations06R");
+savename = "mydata_" + dataFilename + "1.mat";
+save(savename, "aircraft24L", "aircraft06R", "tVector24L");
 
 %% Interp1 vs IVV interpolation
 sampleAlt = aircraft24L(3).Alt*100;

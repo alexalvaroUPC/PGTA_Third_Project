@@ -28,7 +28,7 @@ for i=1:numel(aircraft)
             radial = rad2deg(radial);
             if radial<0 radial = radial+360; end
             % aircraft(i).radials(j) = radial;
-            if mean(differentialHDG(j:j+3)) <-0.6 && differentialHDG(j) > -390
+            if mean(differentialHDG(j:j+4)) <-1.4 && differentialHDG(j) > -390
                 aircraft(i).turningLAT = myAC.LATinterp(j);
                 aircraft(i).turningLON = myAC.LONinterp(j);
                 aircraft(i).turningAlt = myAC.AltInterp(j);
