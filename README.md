@@ -14,4 +14,5 @@ Guide for the MATLAB scripts found in this repository
       g. statsSonometerDistance.m
 
 scatteredTurningPoint.kml containts the points where turning has been deemed to start
+
 mydata_P3_00-24h.csv.mat contains all the variables resulting from analyzing a full day of .csv files
