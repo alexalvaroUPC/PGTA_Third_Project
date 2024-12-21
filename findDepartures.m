@@ -6,6 +6,7 @@ function [departures24L, departures06R] = findDepartures(departureFilename, data
 [~, wakeColumn,~] = find(strcmp(raw,"Estela"));
 [~, classColumn,~] = find(strcmp(raw,"TipoAeronave"));
 [~, routeColumn,~] = find(strcmp(raw,"RutaSACTA"));
+[~, timeSecondsColumn, ~] = find(strcmp(dataMatrix, "TIME(s)"));
 dataMatrix(1,size(dataMatrix,2)+1) = "TOTime";
 dataMatrix(1,size(dataMatrix,2)+1) = "Wake";
 dataMatrix(1,size(dataMatrix,2)+1) = "Class";
@@ -45,14 +46,17 @@ for i = 2:size(raw,1)
     end
     for j = 1:numel(rowsHit)
         dataRow = rowsHit(j);
-        if raw{i, end} == "LEBL-06R"
-            [procSID, groupSID] = findSID(raw{i,routeColumn},"06R");
-            departures06R(rowCount06+1, :) = [dataMatrix(dataRow,1:end-5) TOmoment wakeType classType procSID groupSID];
-            rowCount06 = rowCount06+1;
-        else
-            [procSID, groupSID] = findSID(raw{i,routeColumn},"24L");
-            departures24L(rowCount24+1, :) = [dataMatrix(dataRow,1:end-5) TOmoment wakeType classType procSID groupSID];
-            rowCount24 = rowCount24+1;
+        messageTime = duration(seconds(str2double(dataMatrix(dataRow,timeSecondsColumn))),'Format','hh:mm:ss.SSS');
+        if duration(TOmoment) <= messageTime + duration(seconds(300))
+            if raw{i, end} == "LEBL-06R"
+                [procSID, groupSID] = findSID(raw{i,routeColumn},"06R");
+                departures06R(rowCount06+1, :) = [dataMatrix(dataRow,1:end-5) TOmoment wakeType classType procSID groupSID];
+                rowCount06 = rowCount06+1;
+            elseif raw{i, end} == "LEBL-24L"
+                [procSID, groupSID] = findSID(raw{i,routeColumn},"24L");
+                departures24L(rowCount24+1, :) = [dataMatrix(dataRow,1:end-5) TOmoment wakeType classType procSID groupSID];
+                rowCount24 = rowCount24+1;
+            end
         end
     end
 end

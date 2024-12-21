@@ -1,4 +1,4 @@
-function [distances] = distanceCalculation(aircrafts, UrwyDER, VrwyDER, tVector)
+function [distances] = distanceCalculation(aircrafts, UrwyDER, VrwyDER, tVector, criticalLon, criteria)
 for i = 2:numel(aircrafts)
     firstAC = aircrafts(i-1);
     secondAC = aircrafts(i);
@@ -20,22 +20,28 @@ for i = 2:numel(aircrafts)
     secondAC.Uinterp = interpolatedU;
     interpolatedV = smartInterpolation(secondAC.TIMEseconds, secondAC.V, tVector, secondAC.interpStart, secondAC.interpEnd);
     secondAC.Vinterp = interpolatedV;
+    interpolatedLON = smartInterpolation(secondAC.TIMEseconds, secondAC.LON, tVector, secondAC.interpStart, secondAC.interpEnd);
+    secondAC.LONinterp = interpolatedLON;
 
     for j = 1:numel(firstAC.Uinterp)
         if sqrt((secondAC.Uinterp(j)-UrwyDER)^2+(secondAC.Vinterp(j)-VrwyDER)^2) >= 0.5
-            if(firstAC.Uinterp(j)>-400)&&(secondAC.Uinterp(j)>-400)
-                applicable = true;
-                distances(i-1).Separations(k) = sqrt((firstAC.Uinterp(j)-secondAC.Uinterp(j))^2+(firstAC.Vinterp(j)-secondAC.Vinterp(j))^2);
-                distances(i-1).timeInstants(k) = duration(seconds(tVector(j)),'Format','hh:mm:ss.SSS');
-                if ~crossed05NM
-                    distances(i-1).TWRseparation =  distances(i-1).Separations(k);
-                    distances(i-1).TWRtime = duration(seconds(tVector(j)), 'Format','hh:mm:ss.SSS');
-                    crossed05NM = true;
+            if (secondAC.LONinterp(j) >= criticalLon && criteria == "higher") || (secondAC.LONinterp(j) <= criticalLon && criteria == "lower")
+                if(firstAC.Uinterp(j)>-400)&&(secondAC.Uinterp(j)>-400)
+                    applicable = true;
+                    Separations(k) = sqrt((firstAC.Uinterp(j)-secondAC.Uinterp(j))^2+(firstAC.Vinterp(j)-secondAC.Vinterp(j))^2);
+                    timeInstants(k) = duration(seconds(tVector(j)),'Format','hh:mm:ss.SSS');
+                    k = k+1;
                 end
-                k = k+1;
             end
         end
     end
+
     distances(i-1).Applicability = applicable;
+    if applicable
+        distances(i-1).TWRseparation = Separations(1);
+        distances(i-1).TWRtime = timeInstants(1);
+        distances(i-1).Separations = Separations(2:end);
+        distances(i-1).timeInstants = timeInstants(2:end);
+    end
 end
 end

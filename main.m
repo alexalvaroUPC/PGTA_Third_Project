@@ -41,8 +41,10 @@ Hcamping = 0;
 [Uthr06R, Vthr06R, HsThr06R] = singlePointGeodesic2Sterographic(LATthr06R,LONthr06R,Hthr06R);
 [Ucamping, Vcamping, HsCamping] = singlePointGeodesic2Sterographic(LATcamping,LONcamping,Hcamping);
 %% DISTANCES BETWEEN SUCCESSIVE DEPARTURES
-distances24L = distanceCalculation(aircraft24L, Uthr06R,Vthr06R, tVector24L);
-distances06R = distanceCalculation(aircraft06R, Uthr24L, Vthr24L, tVector06R);
+criticalLon24L = 2.083333;
+criticalLon06R = 2.094444;
+distances24L = distanceCalculation(aircraft24L, Uthr06R,Vthr06R, tVector24L, criticalLon24L, 'lower');
+distances06R = distanceCalculation(aircraft06R, Uthr24L, Vthr24L, tVector06R, criticalLon06R, 'higher');
 [LoAviolations24L, RADARviolations24L, WakeViolations24L] = separationAnalysis(distances24L);
 [LoAviolations06R, RADARviolations06R, WakeViolations06R] = separationAnalysis(distances06R);
 
