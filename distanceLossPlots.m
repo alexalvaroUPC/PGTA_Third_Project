@@ -559,7 +559,7 @@ end
 
 %% Distances data
 
-minSeparations24L = []; % Inicializar como un array vacío
+minSeparations24L = [];
 
 for i = 1:length(distances24L)
     separations = distances24L(i).Separations; 
