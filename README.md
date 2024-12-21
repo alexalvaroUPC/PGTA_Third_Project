@@ -23,4 +23,8 @@ Guide for the MATLAB scripts found in this repository
 
 scatteredTurningPoint.kml containts the points where turning has been deemed to start
 
-mydata_P3_00-24h.csv.mat contains all the variables resulting from analyzing a full day of .csv files
+newdata_P3_00-24h.csv.mat has all the data updated to the last criteria for TO times, TMA and TWR distinguishments, 0,5NM criterion reviewed and fixed, aircraft departing from 24R/06L removed
+
+mydata_P3_00-24h.csv.mat contains all the variables resulting from analyzing a full day of .csv files if the TO time window is set to 5 minutes
+
+mydata_P3_00-24h_old.csv.mat contains data from old executions before amendments were made.
