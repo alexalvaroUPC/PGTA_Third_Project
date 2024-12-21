@@ -1,8 +1,10 @@
-function [infringementsLoA, infringementsRADAR, infringementsWake] = separationAnalysis(separations)
+function [infringementsLoA, infringementsRADAR_TMA, infringementsWake_TMA, infringementsRADAR_TWR, infringementsWake_TWR] = separationAnalysis(separations)
 % LoA analysis
 loaflag = false;
-radarflag = false;
-wakeflag = false;
+radarflagTMA = false;
+wakeflagTMA = false;
+radarflagTWR = false;
+wakeflagTWR = false;
 k = 1;
 for i = 1:numel(separations)
     currentSep = separations(i);
@@ -39,6 +41,7 @@ for i = 1:numel(separations)
 end
 % RADAR analysis
 k = 1;
+m = 1;
 for i = 1:numel(separations)
     currentSep = separations(i);
     splitCallsigns = strsplit(currentSep.InvolvedAC, "_");
@@ -55,21 +58,34 @@ for i = 1:numel(separations)
     if ~isempty(currentSep.Separations)
         [closestDistance, closestIdx] = min(currentSep.Separations);
         if closestDistance < minSep
-            infringementsRADAR(k).Infractor = secondACcs;
-            infringementsRADAR(k).InfractorSID = secondACSID;
-            infringementsRADAR(k).Victim = firstACcs;
-            infringementsRADAR(k).VictimSID = firstACSID;
-            infringementsRADAR(k).SameSIDgroup = issameSIDgroup;
-            infringementsRADAR(k).CriticalSeparation = closestDistance;
-            infringementsRADAR(k).RequiredSeparation = minSep;
-            infringementsRADAR(k).CriticalInstant = currentSep.timeInstants(closestIdx);
-            radarflag = true;
+            infringementsRADAR_TMA(k).Infractor = secondACcs;
+            infringementsRADAR_TMA(k).InfractorSID = secondACSID;
+            infringementsRADAR_TMA(k).Victim = firstACcs;
+            infringementsRADAR_TMA(k).VictimSID = firstACSID;
+            infringementsRADAR_TMA(k).SameSIDgroup = issameSIDgroup;
+            infringementsRADAR_TMA(k).CriticalSeparation = closestDistance;
+            infringementsRADAR_TMA(k).RequiredSeparation = minSep;
+            infringementsRADAR_TMA(k).CriticalInstant = currentSep.timeInstants(closestIdx);
+            radarflagTMA = true;
             k = k+1;
+        end
+        if currentSep.TWRseparation < minSep
+            infringementsRADAR_TWR(m).Infractor = secondACcs;
+            infringementsRADAR_TWR(m).InfractorSID = secondACSID;
+            infringementsRADAR_TWR(m).Victim = firstACcs;
+            infringementsRADAR_TWR(m).VictimSID = firstACSID;
+            infringementsRADAR_TWR(m).SameSIDgroup = issameSIDgroup;
+            infringementsRADAR_TWR(m).CriticalSeparation = closestDistance;
+            infringementsRADAR_TWR(m).RequiredSeparation = minSep;
+            infringementsRADAR_TWR(m).CriticalInstant = currentSep.timeInstants(closestIdx);
+            radarflagTWR = true;
+            m = m+1;
         end
     end
 end
 %Wake analysis
 k = 1;
+m = 1;
 for i = 1:numel(separations)
     currentSep = separations(i);
     splitCallsigns = strsplit(currentSep.InvolvedAC, "_");
@@ -90,18 +106,30 @@ for i = 1:numel(separations)
         if minSep ~= -1
             [closestDistance, closestIdx] = min(currentSep.Separations);
             if closestDistance < minSep
-                infringementsWake(k).Infractor = secondACcs;
-                infringementsWake(k).InfractorSID = secondACSID;
-                infringementsWake(k).InfractorWake = secondACwake;
-                infringementsWake(k).Victim = firstACcs;
-                infringementsWake(k).VictimSID = firstACSID;
-                infringementsWake(k).VictimWake = firstACwake;
-                infringementsWake(k).SameSIDgroup = issameSIDgroup;
-                infringementsWake(k).CriticalSeparation = closestDistance;
-                infringementsWake(k).RequiredSeparation = minSep;
-                infringementsWake(k).CriticalInstant = currentSep.timeInstants(closestIdx);
-                wakeflag = true;
+                infringementsWake_TMA(k).Infractor = secondACcs;
+                infringementsWake_TMA(k).InfractorSID = secondACSID;
+                infringementsWake_TMA(k).InfractorWake = secondACwake;
+                infringementsWake_TMA(k).Victim = firstACcs;
+                infringementsWake_TMA(k).VictimSID = firstACSID;
+                infringementsWake_TMA(k).VictimWake = firstACwake;
+                infringementsWake_TMA(k).SameSIDgroup = issameSIDgroup;
+                infringementsWake_TMA(k).CriticalSeparation = closestDistance;
+                infringementsWake_TMA(k).RequiredSeparation = minSep;
+                infringementsWake_TMA(k).CriticalInstant = currentSep.timeInstants(closestIdx);
+                wakeflagTMA = true;
                 k = k+1;
+            end
+            if currentSep.TWRseparation < minSep
+                infringementsWake_TWR(m).Infractor = secondACcs;
+                infringementsWake_TWR(m).InfractorSID = secondACSID;
+                infringementsWake_TWR(m).Victim = firstACcs;
+                infringementsWake_TWR(m).VictimSID = firstACSID;
+                infringementsWake_TWR(m).SameSIDgroup = issameSIDgroup;
+                infringementsWake_TWR(m).CriticalSeparation = closestDistance;
+                infringementsWake_TWR(m).RequiredSeparation = minSep;
+                infringementsWake_TWR(m).CriticalInstant = currentSep.timeInstants(closestIdx);
+                wakeflagTWR = true;
+                m = m+1;
             end
         end
     end
@@ -109,9 +137,15 @@ end
 if ~loaflag
     infringementsLoA = "None";
 end
-if ~radarflag
-    infringementsRADAR = "None";
+if ~radarflagTMA
+    infringementsRADAR_TMA = "None";
 end
-if ~wakeflag
-    infringementsWake = "None";
+if ~radarflagTWR
+    infringementsRADAR_TWR = "None";
+end
+if ~wakeflagTMA
+    infringementsWake_TMA = "None";
+end
+if ~wakeflagTWR
+    infringementsWake_TWR = "None";
 end

@@ -47,7 +47,7 @@ for i = 2:size(raw,1)
     for j = 1:numel(rowsHit)
         dataRow = rowsHit(j);
         messageTime = duration(seconds(str2double(dataMatrix(dataRow,timeSecondsColumn))),'Format','hh:mm:ss.SSS');
-        if duration(TOmoment) <= messageTime + duration(seconds(300))
+        if duration(TOmoment) <= messageTime + duration(seconds(1200))
             if raw{i, end} == "LEBL-06R"
                 [procSID, groupSID] = findSID(raw{i,routeColumn},"06R");
                 departures06R(rowCount06+1, :) = [dataMatrix(dataRow,1:end-5) TOmoment wakeType classType procSID groupSID];

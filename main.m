@@ -45,8 +45,8 @@ criticalLon24L = 2.083333;
 criticalLon06R = 2.094444;
 distances24L = distanceCalculation(aircraft24L, Uthr06R,Vthr06R, tVector24L, criticalLon24L, 'lower');
 distances06R = distanceCalculation(aircraft06R, Uthr24L, Vthr24L, tVector06R, criticalLon06R, 'higher');
-[LoAviolations24L, RADARviolations24L, WakeViolations24L] = separationAnalysis(distances24L);
-[LoAviolations06R, RADARviolations06R, WakeViolations06R] = separationAnalysis(distances06R);
+[LoAviolations24L, RADARviolations24L_TMA, WakeViolations24L_TMA, RADARviolations24L_TWR, WakeViolations24L_TWR] = separationAnalysis(distances24L);
+[LoAviolations06R, RADARviolations06R_TMA, WakeViolations06R_TMA, RADARviolations06R_TWR, WakeViolations06R_TWR] = separationAnalysis(distances06R);
 
 %% TURNING POINT DETECTION
 aircraft24L = turningPointDetection(aircraft24L, tVector24L);
@@ -63,8 +63,9 @@ aircraft24L = heightIASdata(aircraft24L, tVector24L);
 aircraft06R = heightIASdata(aircraft06R, tVector06R);
 
 %% SAVE DATA
-savename = "mydata_" + dataFilename + ".mat";
-save(savename, "aircraft24L", "aircraft06R", "distances24L", "distances06R", "LoAviolations24L", "LoAviolations06R", "RADARviolations24L", "RADARviolations06R", "WakeViolations24L", "WakeViolations06R");
+savename = "newdata" + dataFilename + ".mat";
+save(savename, "aircraft24L", "aircraft06R", "distances24L", "distances06R", "LoAviolations24L", "LoAviolations06R", "RADARviolations24L_TMA", "RADARviolations06R_TMA", "WakeViolations24L_TMA", "WakeViolations06R_TMA", ...
+    "RADARviolations06R_TWR","WakeViolations06R_TWR","WakeViolations24L_TWR","RADARviolations24L_TWR");
 % savename = "mydata_" + dataFilename + "1.mat";
 % save(savename, "aircraft24L", "tVector24L");
 
